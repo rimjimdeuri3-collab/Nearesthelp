@@ -1,0 +1,639 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Nearest Help</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: one narrow column. A red call block opens the page, then tabbed nearby lists, then an add form.
+   All boldness sits in the 112 block; everything else stays quiet and large enough to tap. */
+:root {
+  color-scheme: light;
+  --bg: #F2F6F5;
+  --surface: #FFFFFF;
+  --ink: #0C1A19;
+  --muted: #43544F;
+  --line: #C5D2CF;
+  --red: #C4102B;
+  --red-ink: #FFFFFF;
+  --red-text: #B00D26;
+  --red-tint: #FBE6E9;
+  --ok: #0A7547;
+  --ok-tint: #DDF3E8;
+  --warn-ink: #6B4500;
+  --warn-tint: #FFEFC2;
+  --focus: #0B57D0;
+  --f-ui: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --f-num: ui-monospace, "SF Mono", Consolas, "Roboto Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0A1110; --surface: #121C1B; --ink: #E8F1EF; --muted: #9FB3AF; --line: #263A37;
+    --red: #C4102B; --red-ink: #FFFFFF; --red-text: #FF7A8A; --red-tint: #3A1219;
+    --ok: #5FD39B; --ok-tint: #0F2E21; --warn-ink: #FFD479; --warn-tint: #3A2C08; --focus: #7FB0FF;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0A1110; --surface: #121C1B; --ink: #E8F1EF; --muted: #9FB3AF; --line: #263A37;
+  --red: #C4102B; --red-ink: #FFFFFF; --red-text: #FF7A8A; --red-tint: #3A1219;
+  --ok: #5FD39B; --ok-tint: #0F2E21; --warn-ink: #FFD479; --warn-tint: #3A2C08; --focus: #7FB0FF;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 17px/1.45 var(--f-ui);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 18px 48px;
+}
+.wrap { max-width: 640px; margin: 0 auto; display: flex; flex-direction: column; gap: 26px; }
+h1, h2, h3, p, ul { margin: 0; }
+ul { padding: 0; list-style: none; }
+a, button, summary, input, select { font: inherit; color: inherit; }
+a:focus, button:focus, summary:focus, input:focus, select:focus { outline: 3px solid var(--focus); outline-offset: 2px; }
+.muted { color: var(--muted); }
+
+/* header */
+.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.mark { width: 24px; height: 24px; border: 5px solid var(--red); border-radius: 50%; position: relative; flex: none; }
+.mark::after { content: ""; position: absolute; inset: 3px; background: var(--red); border-radius: 50%; }
+h1 { font-size: 1.35rem; font-weight: 800; letter-spacing: 0.01em; }
+.net { font-size: 0.82rem; font-weight: 600; padding: 4px 10px; border-radius: 99px; background: var(--ok-tint); color: var(--ok); }
+.net.off { background: var(--warn-tint); color: var(--warn-ink); }
+
+/* emergency call block */
+.sos {
+  display: flex; align-items: center; gap: 16px;
+  background: var(--red); color: var(--red-ink);
+  text-decoration: none; border-radius: 14px; padding: 18px 20px; min-height: 96px;
+}
+.sos-num { font: 800 4rem/1 var(--f-num); letter-spacing: -0.02em; }
+.sos-txt { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.sos-txt strong { font-size: 1.15rem; line-height: 1.2; }
+.sos-txt span { font-size: 0.95rem; opacity: 0.95; }
+.quick { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }
+.quick a {
+  display: flex; align-items: center; gap: 12px; text-decoration: none;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+  padding: 10px 12px; min-height: 56px;
+}
+.quick b { font: 700 1.5rem/1 var(--f-num); color: var(--red-text); min-width: 3.2ch; }
+.quick span { font-size: 0.92rem; line-height: 1.25; min-width: 0; }
+.fine { font-size: 0.9rem; color: var(--muted); margin-top: 10px; }
+
+/* sections */
+h2 { font-size: 1.15rem; font-weight: 800; margin-bottom: 12px; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 48px; padding: 8px 16px; border-radius: 10px; cursor: pointer;
+  background: var(--surface); border: 2px solid var(--ink); font-weight: 700; text-decoration: none;
+}
+.btn-primary { background: var(--ink); color: var(--bg); }
+.btn-call { background: var(--red); border-color: var(--red); color: var(--red-ink); }
+.btn-small { min-height: 44px; padding: 6px 12px; font-size: 0.95rem; border-width: 1px; border-color: var(--line); font-weight: 600; }
+.btn-off { opacity: 0.55; cursor: default; background: var(--bg); border: 1px dashed var(--line); color: var(--muted); }
+.loc { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+.loc p { font-size: 0.92rem; flex: 1 1 14rem; min-width: 0; }
+
+.tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.tab {
+  min-height: 52px; padding: 6px 10px; border-radius: 10px; cursor: pointer; text-align: left;
+  background: var(--surface); border: 1px solid var(--line); font-weight: 700;
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+}
+.tab[aria-selected="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.tab .n { font: 600 0.85rem var(--f-num); opacity: 0.8; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.chip-btn {
+  min-height: 44px; min-width: 48px; padding: 4px 12px; border-radius: 99px; cursor: pointer;
+  background: var(--surface); border: 1px solid var(--line); font: 700 0.95rem var(--f-num);
+}
+.chip-btn[aria-pressed="true"] { background: var(--red); border-color: var(--red); color: var(--red-ink); }
+
+.notice {
+  margin-top: 14px; padding: 12px 14px; border-radius: 10px; font-size: 0.92rem;
+  background: var(--warn-tint); color: var(--warn-ink);
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+}
+.notice p { flex: 1 1 14rem; min-width: 0; }
+
+.list { display: flex; flex-direction: column; gap: 12px; margin-top: 14px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+.card.is-ex { border-style: dashed; }
+.card-head { display: flex; gap: 12px; align-items: flex-start; }
+.grp {
+  flex: none; width: 52px; height: 52px; display: flex; align-items: center; justify-content: center;
+  border: 2px solid var(--red-text); color: var(--red-text); border-radius: 10px;
+  font: 800 1.2rem var(--f-num); background: var(--red-tint);
+}
+.card-title { min-width: 0; flex: 1; display: flex; flex-direction: column; gap: 6px; }
+h3 { font-size: 1.08rem; font-weight: 700; line-height: 1.25; overflow-wrap: anywhere; }
+.meta { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font-size: 0.8rem; font-weight: 700; padding: 2px 9px; border-radius: 99px; background: var(--bg); border: 1px solid var(--line); }
+.chip-ok { background: var(--ok-tint); color: var(--ok); border-color: transparent; }
+.chip-ex { background: var(--warn-tint); color: var(--warn-ink); border-color: transparent; }
+.chip-dist { background: var(--ink); color: var(--bg); border-color: transparent; font-family: var(--f-num); }
+.note { font-size: 0.93rem; color: var(--muted); overflow-wrap: anywhere; }
+.phone { font: 700 1.35rem/1.2 var(--f-num); letter-spacing: 0.02em; overflow-wrap: anywhere; user-select: all; -webkit-user-select: all; }
+.phone.none { font-size: 0.95rem; font-weight: 500; color: var(--muted); user-select: auto; -webkit-user-select: auto; }
+.acts { display: flex; flex-wrap: wrap; gap: 8px; }
+.empty { margin-top: 14px; padding: 18px; border: 1px dashed var(--line); border-radius: 12px; color: var(--muted); }
+.more { margin-top: 14px; font-size: 0.95rem; }
+.more a { color: var(--red-text); font-weight: 700; }
+
+/* add form + details */
+details { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; }
+summary { padding: 14px 16px; min-height: 52px; font-weight: 800; cursor: pointer; display: flex; align-items: center; }
+details > div, details > form { padding: 4px 16px 16px; }
+form { display: flex; flex-direction: column; gap: 14px; }
+label { display: flex; flex-direction: column; gap: 5px; font-weight: 700; font-size: 0.95rem; }
+label small { font-weight: 400; color: var(--muted); }
+input[type="text"], input[type="tel"], input[type="date"], select {
+  min-height: 48px; padding: 8px 12px; border-radius: 10px; width: 100%;
+  background: var(--bg); border: 1px solid var(--line); color: var(--ink); font-size: 1rem;
+}
+.row2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.check { flex-direction: row; align-items: center; gap: 10px; min-height: 44px; }
+.check input { width: 24px; height: 24px; flex: none; }
+.err { color: var(--red-text); font-weight: 700; font-size: 0.95rem; }
+.steps { padding-left: 1.2rem; display: flex; flex-direction: column; gap: 8px; font-size: 0.95rem; list-style: decimal; }
+.foot { font-size: 0.85rem; color: var(--muted); }
+
+#toast {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; pointer-events: none;
+  display: flex; justify-content: center;
+  padding: 12px max(16px, env(safe-area-inset-right, 0px)) calc(14px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+}
+#toast span { background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 10px; font-weight: 600; max-width: 100%; }
+
+@media (min-width: 520px) {
+  .tabs { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .quick { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 360px) {
+  .sos-num { font-size: 3.2rem; }
+  .row2 { grid-template-columns: 1fr; }
+}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><span class="mark" aria-hidden="true"></span><h1>Nearest Help</h1></div>
+    <span class="net" id="net">Works offline</span>
+  </header>
+
+  <section aria-label="Emergency numbers">
+    <a class="sos" href="tel:112">
+      <span class="sos-num">112</span>
+      <span class="sos-txt"><strong>Call for any emergency</strong><span>Police, fire, ambulance</span></span>
+    </a>
+    <ul class="quick">
+      <li><a href="tel:108"><b>108</b><span>Ambulance</span></a></li>
+      <li><a href="tel:102"><b>102</b><span>Mother and child ambulance</span></a></li>
+      <li><a href="tel:101"><b>101</b><span>Fire</span></a></li>
+      <li><a href="tel:100"><b>100</b><span>Police</span></a></li>
+      <li><a href="tel:1091"><b>1091</b><span>Women helpline</span></a></li>
+      <li><a href="tel:1098"><b>1098</b><span>Child helpline</span></a></li>
+    </ul>
+    <p class="fine">Ambulance numbers differ by state, and 102 runs only in some. If one does not connect, try another. Save your local numbers below.</p>
+  </section>
+
+  <section aria-labelledby="near-h">
+    <h2 id="near-h">Nearby help</h2>
+    <div class="loc">
+      <button type="button" class="btn btn-primary" id="btn-loc">Use my location</button>
+      <p class="muted" id="loc-msg" aria-live="polite">Location not set. Lists show in saved order.</p>
+    </div>
+
+    <div class="tabs" role="tablist" id="tabs" aria-label="Type of help"></div>
+    <div class="chips" id="groups" hidden></div>
+
+    <div class="notice" id="notice" hidden>
+      <p>These examples show how the lists work. They have no real numbers. Add your own, then remove them.</p>
+      <button type="button" class="btn btn-small" id="btn-rmex">Remove examples</button>
+    </div>
+
+    <ul class="list" id="list"></ul>
+    <p class="empty" id="empty" hidden></p>
+    <p class="more" id="more"></p>
+    <noscript><p class="empty">Saved contacts need scripts turned on in your browser. The emergency numbers above work without them.</p></noscript>
+  </section>
+
+  <details id="add">
+    <summary>Add a contact</summary>
+    <form id="form" novalidate>
+      <label for="f-cat">Type
+        <select id="f-cat"></select>
+      </label>
+      <label for="f-name">Name
+        <input type="text" id="f-name" autocomplete="off" placeholder="Name of the place or person">
+      </label>
+      <label for="f-phone">Phone number
+        <input type="tel" id="f-phone" autocomplete="off" inputmode="tel" placeholder="Number to call">
+      </label>
+      <label for="f-note">Note <small>Optional. Ward, hours, landmark.</small>
+        <input type="text" id="f-note" autocomplete="off">
+      </label>
+      <label class="check" for="f-h24" id="wrap-h24"><input type="checkbox" id="f-h24"> Open 24 hours</label>
+      <div id="wrap-donor" hidden>
+        <div class="row2">
+          <label for="f-group">Blood group
+            <select id="f-group"></select>
+          </label>
+          <label for="f-last">Last donated <small>Optional</small>
+            <input type="date" id="f-last">
+          </label>
+        </div>
+      </div>
+      <div>
+        <div class="row2">
+          <label for="f-lat">Latitude <small>Optional</small>
+            <input type="text" id="f-lat" inputmode="decimal" autocomplete="off">
+          </label>
+          <label for="f-lng">Longitude <small>Optional</small>
+            <input type="text" id="f-lng" inputmode="decimal" autocomplete="off">
+          </label>
+        </div>
+        <p class="fine">Standing at the place? Fill its position so the list can sort by distance.</p>
+        <button type="button" class="btn btn-small" id="btn-fill" style="margin-top:8px">Fill with my position</button>
+      </div>
+      <p class="err" id="f-err" role="alert" aria-live="assertive"></p>
+      <button type="submit" class="btn btn-primary">Save contact</button>
+    </form>
+  </details>
+
+  <details>
+    <summary>Use without internet</summary>
+    <div>
+      <ol class="steps">
+        <li>While online, save this page to your phone with your browser's Save page or Download option.</li>
+        <li>Open the saved file any time. It needs no signal.</li>
+        <li>Contacts you add stay in that browser on that phone. Different browsers keep separate lists.</li>
+        <li>If contacts disappear after you close the browser, it is not allowing storage. Write down your key numbers.</li>
+      </ol>
+    </div>
+  </details>
+
+  <p class="foot">Distances are straight-line, not road distance. Phone numbers you add are stored only on this device.</p>
+</div>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  var KEY = 'nearest-help-v1', POSKEY = 'nearest-help-pos';
+  var CATS = [
+    { id: 'hospital', label: 'Hospital', plural: 'hospitals', q: 'hospital' },
+    { id: 'ambulance', label: 'Ambulance', plural: 'ambulance services', q: 'ambulance service' },
+    { id: 'pharmacy', label: 'Pharmacy', plural: 'pharmacies', q: 'pharmacy' },
+    { id: 'donor', label: 'Blood donors', plural: 'blood donors', q: 'blood bank' }
+  ];
+  var GROUPS = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'];
+  var mem = {};
+
+  function load(k) {
+    try { var v = localStorage.getItem(k); if (v) { return JSON.parse(v); } } catch (e) {}
+    return mem[k] || null;
+  }
+  function save(k, v) {
+    try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { mem[k] = v; }
+  }
+  function $(id) { return document.getElementById(id); }
+  function el(tag, cls, txt) {
+    var n = document.createElement(tag);
+    if (cls) { n.className = cls; }
+    if (txt !== undefined && txt !== null) { n.textContent = txt; }
+    return n;
+  }
+  function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+
+  function seed() {
+    return [
+      { id: 'ex1', cat: 'hospital', name: 'Example District Hospital', phone: '', note: 'Emergency ward', h24: true, example: true },
+      { id: 'ex2', cat: 'ambulance', name: 'Example Ambulance Service', phone: '', note: 'City and nearby villages', h24: true, example: true },
+      { id: 'ex3', cat: 'pharmacy', name: 'Example Medical Store', phone: '', note: 'Open until 11 pm', h24: false, example: true },
+      { id: 'ex4', cat: 'donor', name: 'Example Donor', phone: '', note: 'Prefers calls after 6 pm', group: 'O+', example: true }
+    ];
+  }
+
+  var items = load(KEY);
+  if (!items || !items.length) { items = seed(); save(KEY, items); }
+  var pos = load(POSKEY);
+  var cat = 'hospital', group = 'all';
+
+  /* ---------- helpers ---------- */
+  function digits(p) { return String(p).replace(/[^0-9+]/g, ''); }
+  function km(a, b, c, d) {
+    var R = 6371, r = Math.PI / 180;
+    var dLat = (c - a) * r, dLng = (d - b) * r;
+    var x = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(a * r) * Math.cos(c * r) * Math.sin(dLng / 2) * Math.sin(dLng / 2);
+    return 2 * R * Math.atan2(Math.sqrt(x), Math.sqrt(1 - x));
+  }
+  function fmtDist(d) {
+    if (d < 1) { return (Math.round(d * 100) * 10) + ' m'; }
+    if (d < 10) { return d.toFixed(1) + ' km'; }
+    return Math.round(d) + ' km';
+  }
+  function ago(t) {
+    var m = Math.round((Date.now() - t) / 60000);
+    if (m < 2) { return 'just now'; }
+    if (m < 60) { return m + ' min ago'; }
+    var h = Math.round(m / 60);
+    if (h < 48) { return h + ' h ago'; }
+    return Math.round(h / 24) + ' days ago';
+  }
+  function daysSince(s) {
+    var p = String(s).split('-');
+    if (p.length !== 3) { return null; }
+    var t = new Date(+p[0], +p[1] - 1, +p[2]).getTime();
+    if (isNaN(t)) { return null; }
+    return Math.max(0, Math.floor((Date.now() - t) / 86400000));
+  }
+  function catOf(id) { for (var i = 0; i < CATS.length; i++) { if (CATS[i].id === id) { return CATS[i]; } } return CATS[0]; }
+
+  var toastTimer;
+  function toast(msg) {
+    var t = $('toast');
+    t.textContent = '';
+    t.appendChild(el('span', null, msg));
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { t.textContent = ''; }, 2800);
+  }
+
+  function copyText(text) {
+    function fallback() {
+      try {
+        var ta = document.createElement('textarea');
+        ta.value = text; ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed'; ta.style.top = '0'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select();
+        var ok = document.execCommand('copy');
+        document.body.removeChild(ta);
+        toast(ok ? 'Number copied' : 'Press and hold the number to copy');
+      } catch (e) { toast('Press and hold the number to copy'); }
+    }
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function () { toast('Number copied'); }, fallback);
+      } else { fallback(); }
+    } catch (e) { fallback(); }
+  }
+
+  /* ---------- location ---------- */
+  function setLocMsg() {
+    var m = $('loc-msg');
+    if (pos) {
+      m.textContent = 'Sorted by distance from your position, set ' + ago(pos.t) + '.';
+      $('btn-loc').textContent = 'Update my location';
+    } else {
+      m.textContent = 'Location not set. Lists show in saved order.';
+      $('btn-loc').textContent = 'Use my location';
+    }
+  }
+  function getPos(ok, fail) {
+    if (!navigator.geolocation) { fail('This browser cannot share your location.'); return; }
+    navigator.geolocation.getCurrentPosition(function (p) {
+      ok({ lat: p.coords.latitude, lng: p.coords.longitude, t: Date.now() });
+    }, function (e) {
+      fail(e && e.code === 1
+        ? 'Location is turned off for this page. Allow it in browser settings, or use the saved order.'
+        : 'Could not get your position. Try near a window or outdoors.');
+    }, { enableHighAccuracy: true, timeout: 20000, maximumAge: 60000 });
+  }
+  $('btn-loc').onclick = function () {
+    $('loc-msg').textContent = 'Finding your position…';
+    getPos(function (p) { pos = p; save(POSKEY, p); setLocMsg(); render(); },
+      function (msg) { $('loc-msg').textContent = msg; });
+  };
+
+  /* ---------- rendering ---------- */
+  function visible() {
+    var out = [];
+    for (var i = 0; i < items.length; i++) {
+      var it = items[i];
+      if (it.cat !== cat) { continue; }
+      if (cat === 'donor' && group !== 'all' && it.group !== group) { continue; }
+      var d = null;
+      if (pos && typeof it.lat === 'number' && typeof it.lng === 'number') { d = km(pos.lat, pos.lng, it.lat, it.lng); }
+      out.push({ it: it, d: d, i: i });
+    }
+    out.sort(function (a, b) {
+      if (a.d !== null && b.d !== null) { return a.d - b.d; }
+      if (a.d !== null) { return -1; }
+      if (b.d !== null) { return 1; }
+      return a.i - b.i;
+    });
+    return out;
+  }
+
+  function renderTabs() {
+    var box = $('tabs');
+    box.textContent = '';
+    CATS.forEach(function (c) {
+      var n = 0;
+      items.forEach(function (it) { if (it.cat === c.id) { n++; } });
+      var b = el('button', 'tab');
+      b.type = 'button';
+      b.setAttribute('role', 'tab');
+      b.setAttribute('aria-selected', c.id === cat ? 'true' : 'false');
+      b.appendChild(el('span', null, c.label));
+      b.appendChild(el('span', 'n', String(n)));
+      b.onclick = function () {
+        cat = c.id; group = 'all';
+        $('f-cat').value = cat; syncForm();
+        render();
+      };
+      box.appendChild(b);
+    });
+  }
+
+  function renderGroups() {
+    var box = $('groups');
+    box.textContent = '';
+    if (cat !== 'donor') { box.hidden = true; return; }
+    box.hidden = false;
+    ['all'].concat(GROUPS).forEach(function (g) {
+      var b = el('button', 'chip-btn', g === 'all' ? 'All' : g);
+      b.type = 'button';
+      b.setAttribute('aria-pressed', g === group ? 'true' : 'false');
+      b.onclick = function () { group = g; render(); };
+      box.appendChild(b);
+    });
+  }
+
+  function card(row) {
+    var it = row.it;
+    var li = el('li', 'card' + (it.example ? ' is-ex' : ''));
+    var head = el('div', 'card-head');
+    if (it.cat === 'donor') { head.appendChild(el('span', 'grp', it.group || '?')); }
+    var t = el('div', 'card-title');
+    t.appendChild(el('h3', null, it.name));
+    var meta = el('div', 'meta');
+    if (it.example) { meta.appendChild(el('span', 'chip chip-ex', 'Example')); }
+    if (it.h24) { meta.appendChild(el('span', 'chip chip-ok', 'Open 24 hours')); }
+    if (row.d !== null) { meta.appendChild(el('span', 'chip chip-dist', fmtDist(row.d))); }
+    if (meta.childNodes.length) { t.appendChild(meta); }
+    if (it.cat === 'donor') {
+      var ds = it.last ? daysSince(it.last) : null;
+      t.appendChild(el('p', 'note', ds === null ? 'No donation date saved' : (ds === 0 ? 'Donated today' : 'Donated ' + ds + (ds === 1 ? ' day ago' : ' days ago'))));
+    }
+    if (it.note) { t.appendChild(el('p', 'note', it.note)); }
+    head.appendChild(t);
+    li.appendChild(head);
+
+    if (it.phone) { li.appendChild(el('div', 'phone', it.phone)); }
+    else { li.appendChild(el('div', 'phone none', 'No number. Example only.')); }
+
+    var acts = el('div', 'acts');
+    if (it.phone) {
+      var call = el('a', 'btn btn-call', 'Call');
+      call.href = 'tel:' + digits(it.phone);
+      call.setAttribute('aria-label', 'Call ' + it.name);
+      acts.appendChild(call);
+      var cp = el('button', 'btn btn-small', 'Copy number');
+      cp.type = 'button';
+      cp.onclick = function () { copyText(it.phone); };
+      acts.appendChild(cp);
+    } else {
+      acts.appendChild(el('span', 'btn btn-call btn-off', 'Call'));
+    }
+    if (typeof it.lat === 'number' && typeof it.lng === 'number') {
+      var dir = el('a', 'btn btn-small', 'Directions');
+      dir.href = 'https://www.google.com/maps/dir/?api=1&destination=' + it.lat + ',' + it.lng;
+      dir.target = '_blank'; dir.rel = 'noopener';
+      acts.appendChild(dir);
+    }
+    var del = el('button', 'btn btn-small', 'Delete');
+    del.type = 'button';
+    var timer;
+    del.onclick = function () {
+      if (del.getAttribute('data-armed') === '1') {
+        items = items.filter(function (x) { return x.id !== it.id; });
+        save(KEY, items); render(); toast('Deleted');
+      } else {
+        del.setAttribute('data-armed', '1');
+        del.textContent = 'Tap again to delete';
+        clearTimeout(timer);
+        timer = setTimeout(function () { del.removeAttribute('data-armed'); del.textContent = 'Delete'; }, 4000);
+      }
+    };
+    acts.appendChild(del);
+    li.appendChild(acts);
+    return li;
+  }
+
+  function render() {
+    renderTabs();
+    renderGroups();
+    var hasEx = false;
+    items.forEach(function (it) { if (it.example) { hasEx = true; } });
+    $('notice').hidden = !hasEx;
+
+    var rows = visible(), list = $('list'), c = catOf(cat);
+    list.textContent = '';
+    rows.forEach(function (r) { list.appendChild(card(r)); });
+    var empty = $('empty');
+    if (!rows.length) {
+      empty.hidden = false;
+      empty.textContent = (cat === 'donor' && group !== 'all')
+        ? 'No saved donors with blood group ' + group + '.'
+        : 'No ' + c.plural + ' saved yet. Add the ones near home, work and school.';
+    } else { empty.hidden = true; }
+
+    var more = $('more');
+    more.textContent = '';
+    var a = el('a', null, 'Search the map for ' + (cat === 'donor' ? 'blood banks' : c.plural) + ' near me');
+    a.href = 'https://www.google.com/maps/search/' + encodeURIComponent(c.q + ' near me');
+    a.target = '_blank'; a.rel = 'noopener';
+    more.appendChild(a);
+    more.appendChild(document.createTextNode(' (needs internet)'));
+  }
+
+  /* ---------- form ---------- */
+  function fillSelects() {
+    var s = $('f-cat');
+    CATS.forEach(function (c) { var o = el('option', null, c.label); o.value = c.id; s.appendChild(o); });
+    var g = $('f-group');
+    GROUPS.forEach(function (x) { var o = el('option', null, x); o.value = x; g.appendChild(o); });
+  }
+  function syncForm() {
+    var v = $('f-cat').value;
+    $('wrap-donor').hidden = v !== 'donor';
+    $('wrap-h24').hidden = v === 'donor';
+  }
+  $('f-cat').onchange = syncForm;
+
+  $('btn-fill').onclick = function () {
+    var err = $('f-err');
+    err.textContent = '';
+    getPos(function (p) {
+      $('f-lat').value = p.lat.toFixed(5);
+      $('f-lng').value = p.lng.toFixed(5);
+      pos = p; save(POSKEY, p); setLocMsg();
+      toast('Position filled');
+    }, function (msg) { err.textContent = msg; });
+  };
+
+  function num(v, lo, hi) {
+    v = String(v).replace(/^\s+|\s+$/g, '');
+    if (v === '') { return null; }
+    var n = parseFloat(v);
+    if (isNaN(n) || n < lo || n > hi) { return NaN; }
+    return n;
+  }
+
+  $('form').onsubmit = function (e) {
+    e.preventDefault();
+    var err = $('f-err');
+    var name = $('f-name').value.replace(/^\s+|\s+$/g, '');
+    var phone = $('f-phone').value.replace(/^\s+|\s+$/g, '');
+    var c = $('f-cat').value;
+    if (!name) { err.textContent = 'Enter a name.'; $('f-name').focus(); return; }
+    if (digits(phone).replace(/\+/g, '').length < 3) { err.textContent = 'Enter a phone number with at least 3 digits.'; $('f-phone').focus(); return; }
+    var lat = num($('f-lat').value, -90, 90), lng = num($('f-lng').value, -180, 180);
+    if (lat !== lat || lng !== lng) { err.textContent = 'Latitude must be between -90 and 90, and longitude between -180 and 180.'; return; }
+    if ((lat === null) !== (lng === null)) { err.textContent = 'Fill both latitude and longitude, or leave both empty.'; return; }
+    var it = { id: uid(), cat: c, name: name, phone: phone, note: $('f-note').value.replace(/^\s+|\s+$/g, '') };
+    if (c === 'donor') { it.group = $('f-group').value; if ($('f-last').value) { it.last = $('f-last').value; } }
+    else { it.h24 = $('f-h24').checked; }
+    if (lat !== null) { it.lat = lat; it.lng = lng; }
+    items.push(it);
+    save(KEY, items);
+    err.textContent = '';
+    $('f-name').value = ''; $('f-phone').value = ''; $('f-note').value = '';
+    $('f-lat').value = ''; $('f-lng').value = ''; $('f-last').value = ''; $('f-h24').checked = false;
+    cat = c; group = 'all';
+    render();
+    toast('Saved on this phone');
+  };
+
+  $('btn-rmex').onclick = function () {
+    items = items.filter(function (x) { return !x.example; });
+    save(KEY, items); render(); toast('Examples removed');
+  };
+
+  /* ---------- online / offline ---------- */
+  function net() {
+    var n = $('net'), on = navigator.onLine !== false;
+    n.textContent = on ? 'Online. Also works offline' : 'Offline. Saved contacts still work';
+    n.className = 'net' + (on ? '' : ' off');
+  }
+  window.addEventListener('online', net);
+  window.addEventListener('offline', net);
+
+  fillSelects();
+  $('f-cat').value = cat;
+  syncForm();
+  setLocMsg();
+  net();
+  render();
+})();
+</script>
+
+</body></html>
